@@ -1,4 +1,4 @@
-from pyrogram import Client, Filters
+from pyrogram import Client, filters
 from creds import Creds
 from random import randint
 from progress import progress_for_pyrogram
@@ -15,7 +15,7 @@ app = Client(
         api_id=Creds.APP_ID,
         api_hash=Creds.API_HASH,
     )
-@app.on_message(Filters.command(["auth"]))
+@app.on_message(filters.command(["auth"]))
 def auth(client, message):
     FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
     drive: GoogleDrive
@@ -44,7 +44,7 @@ def auth(client, message):
 
 
 
-@app.on_message(Filters.text)
+@app.on_message(filters.text)
 def token(client, message):
     msg = message.text
     ID = message.chat.id
@@ -60,11 +60,11 @@ def token(client, message):
             print("Auth Error :", e)
             message.reply_text("AUTH Failed")
    
-@app.on_message(Filters.command(["start"]))
+@app.on_message(filters.command(["start"]))
 def start(client, message):
     message.reply_text('HELLO WORLD')
 
-@app.on_message(Filters.command(["status"]))
+@app.on_message(filters.command(["status"]))
 def alive(client, message):
     message.reply_text("I'm alive :)")
 
@@ -72,7 +72,7 @@ def alive(client, message):
 
 
 
-@app.on_message(Filters.document)
+@app.on_message(filters.document)
 def echo(client, message):
     a = message.reply_text('doc found')
     c_time = time.time()

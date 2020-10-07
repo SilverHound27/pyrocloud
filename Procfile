@@ -1,2 +1,2 @@
-worker: python3 mwe.py
+worker: python3 bot.py
 

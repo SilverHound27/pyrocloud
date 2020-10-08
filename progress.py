@@ -4,7 +4,7 @@ import time
 
 
 
-def progress_for_pyrogram(current, total, ud_type, message, start):
+async def progress_for_pyrogram(current, total, ud_type, message, start):
     now = time.time()
     diff = now - start
     if round(diff % 5.00) == 0 or current == total:
@@ -31,7 +31,7 @@ def progress_for_pyrogram(current, total, ud_type, message, start):
             estimated_total_time if estimated_total_time != '' else "0 s"
         )
         try:
-            message.edit(
+            await message.edit(
                 text="{}\n {}".format(
                     ud_type,
                     tmp

@@ -14,7 +14,7 @@ http = None
 initial_folder = None
 
 
-def upload(filename: str, update, context, parent_folder: str = None) -> None:
+async def upload(filename: str, update, context, parent_folder: str = None) -> None:
 
     FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
     drive: GoogleDrive
@@ -83,8 +83,9 @@ def upload(filename: str, update, context, parent_folder: str = None) -> None:
     file_to_upload = drive.CreateFile(file_params)
     file_to_upload.SetContentFile(filename)
     try:
+        print('Trying to upload')
         file_to_upload.Upload(param={"supportsTeamDrives" : True , "http": http})
-        
+        print('upload completed')
         
     except Exception as e:
         print("upload",e)

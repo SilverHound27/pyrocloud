@@ -14,7 +14,7 @@ http = None
 initial_folder = None
 
 
-def upload(filename: str, update, context, parent_folder: str = None) -> None:
+async def upload(filename: str, update, context, parent_folder: str = None) -> None:
 
     FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
     drive: GoogleDrive

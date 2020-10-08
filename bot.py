@@ -86,12 +86,12 @@ async def echo(client, message):
     await a.edit(text = 'Trying to upload file: \n\t{}'.format(file_name))
     
     try:
-        dl_url = upload(file_name, message, client, 'HERMES_UPLOAD')
+        dl_url = await upload(file_name, message, client, 'HERMES_UPLOAD')
     except Exception as e:
         print("error Code : UPX11", e)
         await a.edit("Uploading fail :{}".format(e))
     else:
-        await a.edit("File uploaded successfully\n Filename: {}\n URL: {}".format(file_name, dl_url))
+        await a.edit('<code>{}</code> \n\t\t <a href ="{}">--DOWNLOAD--</a> '.format(file_name, dl_url))
     try:
         os.remove(file_name)
     except Exception as e:

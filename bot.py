@@ -42,10 +42,10 @@ async def auth(client, message):
         await message.reply_text("Already AUTH")
 
 
-
-@app.on_message(filters.text)
+@app.on_message(filters.regex(".\/.{55}"))
 async def token(client, message):
     msg = message.text
+    print(msg)
     ID = message.chat.id
     ID = str(ID)
     token = msg.split()[-1]
@@ -67,8 +67,10 @@ def start(client, message):
 def alive(client, message):
     message.reply_text("I'm alive :)")
 
-
-
+#\b[Hh]m+\b
+@app.on_message(filters.regex(r'\b[Hh]m+\b') | filters.regex(r'\bm{2,}\b'))
+def my_handler(client, message):
+    message.reply_sticker("CAADAgADKAMAArVx2gaQekqHXpVKbhYE")
 
 
 @app.on_message(filters.document)
@@ -86,6 +88,7 @@ async def echo(client, message):
     await a.edit(text = 'Trying to upload file: \n\t{}'.format(file_name))
     
     try:
+        print('Going into the upload function')
         dl_url = await upload(file_name, message, client, 'HERMES_UPLOAD')
     except Exception as e:
         print("error Code : UPX11", e)

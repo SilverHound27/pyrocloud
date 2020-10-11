@@ -1,10 +1,14 @@
 from pyrogram import Client, filters
+import pyrogram
 from creds import Creds
 from progress import progress_for_pyrogram
 import time
 from pydrive.auth import GoogleAuth
 from upload import server_upload
+from yt_dl.yt_main import youtube
 import os
+from decoretors.buttons import button
+
 gauth = GoogleAuth()
 
 
@@ -106,4 +110,8 @@ async def echo(client, message):
         os.remove(file_name)
         print('file removed')
 
+yt_regex = r"(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/\S*?[^\w\s-])((?!videoseries)[\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['\"][^<>]*>|<\/a>))[?=&+%\w.-]*"
+app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.regex(yt_regex)))
+app.add_handler(pyrogram.handlers.CallbackQueryHandler(button))
+ 
 app.run()  # Automatically start() and idle()

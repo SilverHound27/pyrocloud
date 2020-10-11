@@ -239,7 +239,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                 sent_message = await message.edit_media(
                     media=InputMediaVideo(
                         media=local_file_name,
-                        thumb=thumb,
+                        #thumb=thumb,
                         caption=caption_str,
                         parse_mode="html",
                         width=width,
@@ -258,7 +258,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     duration=duration,
                     width=width,
                     height=height,
-                    thumb=thumb,
+                    #thumb=thumb,
                     supports_streaming=True,
                     disable_notification=True,
                     reply_to_message_id=message.reply_to_message.message_id,

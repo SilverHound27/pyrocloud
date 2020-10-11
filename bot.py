@@ -18,6 +18,7 @@ app = Client(
         api_id=Creds.APP_ID,
         api_hash=Creds.API_HASH,
     )
+
 @app.on_message(filters.command(["auth"]))
 async def auth(client, message):
     FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
@@ -79,6 +80,26 @@ def start(client, message):
 def alive(client, message):
     message.reply_text("I'm alive :)")
 
+@app.on_message(filters.command(["exe"]))
+async def alive(client, message):
+    import asyncio
+    command_to_exec = message.text.split()[1:]
+    a = await message.reply_text(command_to_exec)
+    process = await asyncio.create_subprocess_exec(
+        *command_to_exec,
+        # stdout must a pipe to be accessible as process.stdout
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,)
+    # Wait for the subprocess to finish
+    stdout, stderr = await process.communicate()
+    e_response = stderr.decode().strip()
+    t_response = stdout.decode().strip()
+    a = await message.reply_text('Error:\n' + e_response)
+    a = await message.reply_text('REspone:\n' + t_response)
+    print(t_response)
+    print(e_response)
+
+    
 #\b[Hh]m+\b
 @app.on_message(filters.regex(r'\b[Hh]m+\b') | filters.regex(r'\bm{2,}\b'))
 def my_handler(client, message):

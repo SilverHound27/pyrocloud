@@ -206,7 +206,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     thumbnail_location,
                     os.path.dirname(os.path.abspath(local_file_name))
                 )
-            else:
+            '''else:
                 thumb_image_path = await take_screen_shot(
                     local_file_name,
                     os.path.dirname(os.path.abspath(local_file_name)),
@@ -230,7 +230,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     img.resize((320, height))
                     img.save(thumb_image_path, "JPEG")
                     # https://pillow.readthedocs.io/en/3.1.x/reference/Image.html#create-thumbnails
-            #
+            #'''
             thumb = None
             if thumb_image_path is not None and os.path.isfile(thumb_image_path):
                 thumb = thumb_image_path
@@ -242,8 +242,8 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                         #thumb=thumb,
                         caption=caption_str,
                         parse_mode="html",
-                        width=width,
-                        height=height,
+                        #width=width,
+                        #height=height,
                         duration=duration,
                         supports_streaming=True
                     )
@@ -256,8 +256,8 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     caption=caption_str,
                     parse_mode="html",
                     duration=duration,
-                    width=width,
-                    height=height,
+                    #width=width,
+                    #height=height,
                     #thumb=thumb,
                     supports_streaming=True,
                     disable_notification=True,

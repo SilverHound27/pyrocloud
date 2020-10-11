@@ -65,7 +65,7 @@ async def extract_youtube_dl_formats(url, yt_dl_user_name, yt_dl_pass_word, user
         #
         for current_r_json in response_json:
             #
-            thumb_image = current_r_json.get("thumbnail", thumb_image)
+            #thumb_image = current_r_json.get("thumbnail", thumb_image)
             #
             duration = None
             if "duration" in current_r_json:

@@ -175,6 +175,7 @@ async def upload_to_tg(
 
 
 async def upload_single_file(message, local_file_name, caption_str, from_user, edit_media):
+    print('file uploahing rn:', local_file_name)
     await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
     sent_message = None
     start_time = time.time()

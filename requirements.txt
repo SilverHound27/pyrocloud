@@ -1,12 +1,9 @@
 pySmartDL
 PyDrive
-requests
-urllib3
-requests
+ffmpeg
 pyrogram
 https://github.com/pyrogram/pyrogram/archive/asyncio-dev.zip
 tgcrypto
 youtube-dl
 hachoir
 Pillow
-ffmpeg

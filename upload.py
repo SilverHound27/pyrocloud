@@ -206,7 +206,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     thumbnail_location,
                     os.path.dirname(os.path.abspath(local_file_name))
                 )
-            '''else:
+            else:
                 thumb_image_path = await take_screen_shot(
                     local_file_name,
                     os.path.dirname(os.path.abspath(local_file_name)),
@@ -239,11 +239,11 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                 sent_message = await message.edit_media(
                     media=InputMediaVideo(
                         media=local_file_name,
-                        #thumb=thumb,
+                        thumb=thumb,
                         caption=caption_str,
                         parse_mode="html",
-                        #width=width,
-                        #height=height,
+                        width=width,
+                        height=height,
                         duration=duration,
                         supports_streaming=True
                     )
@@ -256,9 +256,9 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     caption=caption_str,
                     parse_mode="html",
                     duration=duration,
-                    #width=width,
-                    #height=height,
-                    #thumb=thumb,
+                    width=width,
+                    height=height,
+                    thumb=thumb,
                     supports_streaming=True,
                     disable_notification=True,
                     reply_to_message_id=message.reply_to_message.message_id,

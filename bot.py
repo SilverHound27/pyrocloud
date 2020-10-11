@@ -3,7 +3,7 @@ from creds import Creds
 from progress import progress_for_pyrogram
 import time
 from pydrive.auth import GoogleAuth
-from upload import upload
+from upload import server_upload
 import os
 gauth = GoogleAuth()
 
@@ -20,8 +20,7 @@ async def auth(client, message):
     drive: GoogleDrive
     http = None
     initial_folder = None
-    ID = message.chat.id
-    ID = str(ID)
+    ID = str(message.chat.id)
     try:
         gauth.LoadCredentialsFile(ID)
     except Exception as e:
@@ -40,6 +39,15 @@ async def auth(client, message):
         # auth with  saved creds
         gauth.Authorize()
         await message.reply_text("Already AUTH")
+
+@app.on_message(filters.command(["revoke"]))
+def revoke(client, message):
+    ID = str(message.chat.id)
+    if os.path.isfile(ID):
+        os.remove(ID)
+        message.reply_text("Revoke Successful")
+    else:
+        message.reply_text("Ha Ha Ha")
 
 
 @app.on_message(filters.regex(".\/.{55}"))
@@ -87,16 +95,15 @@ async def echo(client, message):
     
     await a.edit(text = 'Trying to upload file: \n\t{}'.format(file_name))
     
-    try:
-        print('Going into the upload function')
-        dl_url = await upload(file_name, message, client, 'HERMES_UPLOAD')
-    except Exception as e:
-        print("error Code : UPX11", e)
-        await a.edit("Uploading fail :{}".format(e))
+    print('Going into the upload function')
+    dl_url = await server_upload(file_name, message, client, 'HERMES_UPLOAD')
+    if not dl_url:
+        await a.edit("Uploading failed")
     else:
-        await a.edit('<code>{}</code> \n\t\t <a href ="{}">--DOWNLOAD--</a> '.format(file_name, dl_url))
-    try:
+        await a.edit('<code>{}</code> \n\t\t <a href ="{}">--DOWNLOAD--</a> \t\t\t\t#uploads'.format(file_name, dl_url))
+        print('Final message: Upload success')
+    if os.path.isfile(file_name):
         os.remove(file_name)
-    except Exception as e:
-        print(e)
+        print('file removed')
+
 app.run()  # Automatically start() and idle()

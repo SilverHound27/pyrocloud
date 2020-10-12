@@ -1,138 +1,59 @@
 from pyrogram import Client, filters
 import pyrogram
 from creds import Creds
-from progress import progress_for_pyrogram
-import time
-from pydrive.auth import GoogleAuth
-from upload import server_upload
-from yt_dl.yt_main import youtube
-import os
-from decoretors.buttons import button
 
-gauth = GoogleAuth()
+
+from yt_dl.yt_main import youtube
+from miscellaneous.buttons import button
+from miscellaneous.executor import executor
+from miscellaneous.miscellaneous import train, start, status
+from gdrive.tg_doc import dl_doc
+from gdrive.auth import auth, revoke, token
+
+
+
+mkup = [[pyrogram.types.InlineKeyboardButton(text=' Upload to telegram ', callback_data=b'telegram')],
+            [pyrogram.types.InlineKeyboardButton(text=' Generate link ', callback_data=b'gdrive')]]
+rply_mkup = pyrogram.types.InlineKeyboardMarkup(mkup)
 
 
 app = Client(
-        "new",
+        "Hermes",
         bot_token=Creds.TG_TOKEN,
         api_id=Creds.APP_ID,
         api_hash=Creds.API_HASH,
     )
 
-@app.on_message(filters.command(["auth"]))
-async def auth(client, message):
-    FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
-    drive: GoogleDrive
-    http = None
-    initial_folder = None
-    ID = str(message.chat.id)
-    try:
-        gauth.LoadCredentialsFile(ID)
-    except Exception as e:
-        print("Cred file missing :", e)
+#The gdrive auth handler
+app.add_handler(pyrogram.handlers.MessageHandler(auth,filters=filters.command(['auth'])))
 
-    if gauth.credentials is None:
-        authurl = gauth.GetAuthUrl()
-        AUTH_URL = '<a href ="{}">Vist This Url</a> \n Generate And Copy Your Google Drive Token And Send It To Me'
-        AUTH = AUTH_URL.format(authurl)
-        await message.reply_text(text=AUTH, parse_mode="html")
+#The gdrive Revoke handler
+app.add_handler(pyrogram.handlers.MessageHandler(revoke,filters=filters.command(['revoke'])))
 
-    elif gauth.access_token_expired:
-        # Refresh Token if expired
-        gauth.Refresh()
-    else:
-        # auth with  saved creds
-        gauth.Authorize()
-        await message.reply_text("Already AUTH")
+#The handler for authenticating the token
+app.add_handler(pyrogram.handlers.MessageHandler(token,filters=filters.regex(r'.\/.{55}')))
 
-@app.on_message(filters.command(["revoke"]))
-def revoke(client, message):
-    ID = str(message.chat.id)
-    if os.path.isfile(ID):
-        os.remove(ID)
-        message.reply_text("Revoke Successful")
-    else:
-        message.reply_text("Ha Ha Ha")
+#The Start handler
+app.add_handler(pyrogram.handlers.MessageHandler(start,filters=filters.command(['start'])))
 
+#The status hander
+app.add_handler(pyrogram.handlers.MessageHandler(status,filters=filters.command(['status'])))
 
-@app.on_message(filters.regex(".\/.{55}"))
-async def token(client, message):
-    msg = message.text
-    print(msg)
-    ID = message.chat.id
-    ID = str(ID)
-    token = msg.split()[-1]
-    if len(token) == 57 and token[1] == "/" :
-        print(token)
-        try:
-            gauth.Auth(token)
-            gauth.SaveCredentialsFile(ID)
-            await message.reply_text("AUTH Success")
-        except Exception as e:
-            print("Auth Error :", e)
-            await message.reply_text("AUTH Failed")
-   
-@app.on_message(filters.command(["start"]))
-def start(client, message):
-    message.reply_text('HELLO WORLD')
+#The executor Handler
+app.add_handler(pyrogram.handlers.MessageHandler(executor,filters=filters.command(['exec'])))
 
-@app.on_message(filters.command(["status"]))
-def alive(client, message):
-    message.reply_text("I'm alive :)")
+# The tg doc handler
+app.add_handler(pyrogram.handlers.MessageHandler(dl_doc,filters=filters.document))
 
-@app.on_message(filters.command(["exe"]))
-async def alive(client, message):
-    import asyncio
-    command_to_exec = message.text.split()[1:]
-    a = await message.reply_text(command_to_exec)
-    process = await asyncio.create_subprocess_exec(
-        *command_to_exec,
-        # stdout must a pipe to be accessible as process.stdout
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,)
-    # Wait for the subprocess to finish
-    stdout, stderr = await process.communicate()
-    e_response = stderr.decode().strip()
-    t_response = stdout.decode().strip()
-    a = await message.reply_text('Error:\n' + e_response)
-    a = await message.reply_text('REspone:\n' + t_response)
-    print(t_response)
-    print(e_response)
-
-    
-#\b[Hh]m+\b
-@app.on_message(filters.regex(r'\b[Hh]m+\b') | filters.regex(r'\bm{2,}\b'))
-def my_handler(client, message):
-    message.reply_sticker("CAADAgADKAMAArVx2gaQekqHXpVKbhYE")
-
-
-@app.on_message(filters.document)
-async def echo(client, message):
-    a = await message.reply_text('doc found')
-    c_time = time.time()
-    file_name = ".".join(message.document.file_name.split())
-    temp_name = os.path.join(os.getcwd(), file_name)
-    file_path = await client.download_media(message= message,
-                    file_name = temp_name,
-                    progress=progress_for_pyrogram,
-                    progress_args=("Starting dl", a, c_time )
-                    )
-    
-    await a.edit(text = 'Trying to upload file: \n\t{}'.format(file_name))
-    
-    print('Going into the upload function')
-    dl_url = await server_upload(file_name, message, client, 'HERMES_UPLOAD')
-    if not dl_url:
-        await a.edit("Uploading failed")
-    else:
-        await a.edit('<code>{}</code> \n\t\t <a href ="{}">--DOWNLOAD--</a> \t\t\t\t#uploads'.format(file_name, dl_url))
-        print('Final message: Upload success')
-    if os.path.isfile(file_name):
-        os.remove(file_name)
-        print('file removed')
-
+#The youtube handler
 yt_regex = r"(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/\S*?[^\w\s-])((?!videoseries)[\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['\"][^<>]*>|<\/a>))[?=&+%\w.-]*"
 app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.regex(yt_regex)))
+
+#Thw button handler
 app.add_handler(pyrogram.handlers.CallbackQueryHandler(button))
- 
+
+#The hmm|mm handler
+app.add_handler(pyrogram.handlers.MessageHandler(train,filters=filters.regex(r'\b[Hh]m+\b') | filters.regex(r'\bm{2,}\b')))
+
+
 app.run()  # Automatically start() and idle()

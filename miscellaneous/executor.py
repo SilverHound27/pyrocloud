@@ -1,6 +1,11 @@
 import asyncio
+from miscellaneous.locks import locks
 
 async def executor(client, message):
+
+    if not locks['executor']:
+        return
+
     command_to_exec = message.text.split()[1:]
     command_reply = '<bold>Input Command:</bold>\n\t <code>{}</code> \n'.format(" ".join(command_to_exec))
     reply = await message.reply_text(command_reply, parse_mode="html")

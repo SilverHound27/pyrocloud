@@ -2,7 +2,12 @@ import time
 import os
 from progress import progress_for_pyrogram
 from upload import server_upload
+from miscellaneous.locks import locks
+
 async def dl_doc(client, message):
+    if not locks['document']:
+        return
+
     a = await message.reply_text('doc found')
     c_time = time.time()
     file_name = ".".join(message.document.file_name.split())

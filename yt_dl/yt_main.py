@@ -1,7 +1,7 @@
 import re
 import os
 from yt_dl.youtube_dl_extractor import extract_youtube_dl_formats
-
+from miscellaneous.locks import locks
 
 DOWNLOAD_LOCATION = os.getcwd()
 yt_regex = r"(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/\S*?[^\w\s-])((?!videoseries)[\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['\"][^<>]*>|<\/a>))[?=&+%\w.-]*"
@@ -10,6 +10,9 @@ yt_regex = r"(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-noc
 
 
 async def youtube(client, message):
+    if not locks['youtube']:
+        return
+        
     i_m_sefg = await message.reply_text("processing", quote=True)
 
     try:

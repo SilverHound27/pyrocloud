@@ -18,3 +18,5 @@ class Creds():
     EDIT_SLEEP_TIME_OUT = 2
     
     DOWNLOAD_LOCATION = os.getcwd()
+
+    admin = 626538372

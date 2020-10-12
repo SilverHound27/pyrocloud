@@ -13,6 +13,7 @@ from hachoir.parser import createParser
 from PIL import Image
 from progress import progress_for_pyrogram
 from pyrogram.types import InputMediaVideo, InputMediaAudio
+from miscellaneous.locks import locks
 
 FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
 drive: GoogleDrive
@@ -21,6 +22,8 @@ initial_folder = None
 
 
 async def server_upload(filename: str, update, context, parent_folder: str = None) -> None:
+    if not locks['upload']:
+        return
 
     FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder'
     drive: GoogleDrive
@@ -103,6 +106,8 @@ async def upload_to_tg(
     dict_contatining_uploaded_files,
     edit_media=False
 ):
+    if not locks['upload']:
+        return
     base_file_name = os.path.basename(local_file_name)
     caption_str = ""
     caption_str += "<code>"

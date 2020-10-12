@@ -2,11 +2,13 @@ from pyrogram import Client, filters
 import pyrogram
 from creds import Creds
 
+from miscellaneous.locks import locks_fn
 
 from yt_dl.yt_main import youtube
 from miscellaneous.buttons import button
 from miscellaneous.executor import executor
 from miscellaneous.miscellaneous import train, start, status, m_info
+
 from gdrive.tg_doc import dl_doc
 from gdrive.auth import auth, revoke, token
 
@@ -41,6 +43,9 @@ app.add_handler(pyrogram.handlers.MessageHandler(start,filters=filters.command([
 #The status hander
 app.add_handler(pyrogram.handlers.MessageHandler(status,filters=filters.command(['status'])))
 
+#The lock and unlock handler
+app.add_handler(pyrogram.handlers.MessageHandler(locks_fn,filters=filters.command(['lock'])))
+
 #The executor Handler
 app.add_handler(pyrogram.handlers.MessageHandler(executor,filters=filters.command(['exec'])))
 
@@ -59,7 +64,7 @@ app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.command
 app.add_handler(pyrogram.handlers.CallbackQueryHandler(button))
 
 #The hmm|mm handler
-app.add_handler(pyrogram.handlers.MessageHandler(train,filters=filters.regex(r'\b[Hh]m+\b') | filters.regex(r'\bm{2,}\b')))
+app.add_handler(pyrogram.handlers.MessageHandler(train,filters=filters.regex(r'\b[Hh]m+\b') | filters.regex(r'\b[Mm]{2,}\b')))
 
 
 app.run()  # Automatically start() and idle()

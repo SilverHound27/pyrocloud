@@ -6,7 +6,7 @@ from creds import Creds
 from yt_dl.yt_main import youtube
 from miscellaneous.buttons import button
 from miscellaneous.executor import executor
-from miscellaneous.miscellaneous import train, start, status
+from miscellaneous.miscellaneous import train, start, status, m_info
 from gdrive.tg_doc import dl_doc
 from gdrive.auth import auth, revoke, token
 
@@ -23,6 +23,8 @@ app = Client(
         api_id=Creds.APP_ID,
         api_hash=Creds.API_HASH,
     )
+
+#@app.on_message(filters.command(["qw"]))
 
 #The gdrive auth handler
 app.add_handler(pyrogram.handlers.MessageHandler(auth,filters=filters.command(['auth'])))
@@ -42,12 +44,16 @@ app.add_handler(pyrogram.handlers.MessageHandler(status,filters=filters.command(
 #The executor Handler
 app.add_handler(pyrogram.handlers.MessageHandler(executor,filters=filters.command(['exec'])))
 
+#The message info handler --> .thread
+app.add_handler(pyrogram.handlers.MessageHandler(m_info,filters=filters.command(['info'])))
+
 # The tg doc handler
 app.add_handler(pyrogram.handlers.MessageHandler(dl_doc,filters=filters.document))
 
-#The youtube handler
+#The youtube handlers 
 yt_regex = r"(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/\S*?[^\w\s-])((?!videoseries)[\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['\"][^<>]*>|<\/a>))[?=&+%\w.-]*"
 app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.regex(yt_regex)))
+app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.command(['yt'])))
 
 #Thw button handler
 app.add_handler(pyrogram.handlers.CallbackQueryHandler(button))

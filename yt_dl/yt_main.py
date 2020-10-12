@@ -12,7 +12,15 @@ yt_regex = r"(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-noc
 async def youtube(client, message):
     i_m_sefg = await message.reply_text("processing", quote=True)
 
-    url_ext_ed = re.search(yt_regex, message.text).group()
+    try:
+        url_ext_ed = re.search(yt_regex, message.text).group()
+    except:
+        try:
+            url_ext_ed = message.reply_to_message.text
+        except:
+            url_ext_ed = None
+
+
     dl_url, cf_name, yt_dl_user_name, yt_dl_pass_word = url_ext_ed, None, None, None
     
     if dl_url is not None:
@@ -31,4 +39,4 @@ async def youtube(client, message):
         else:
             await i_m_sefg.edit_text(text=text_message, reply_markup=reply_markup)
     else:
-        i_m_sefg.edit("Couldn't find a valid link")
+        i = await i_m_sefg.edit("Couldn't find a valid link")

@@ -5,6 +5,7 @@ import time
 from pySmartDL import SmartDL
 from random import choice
 import asyncio
+from pyrogram.errors import FloodWait
 
 glitch = ['( ͡° ͜ʖ ͡°)', '¯\_(ツ)_/¯', '̿̿ ̿̿ ̿̿ ̿\̿\'\̵͇̿̿\з= ( ▀ ͜͞ʖ▀) =ε/̵͇̿̿/’̿’̿ ̿ ̿̿ ̿̿ ̿̿', '¯\_(ツ)_/¯','ʕ•ᴥ•ʔ', '(ง ͠° ͟ل͜ ͡°)ง', '(;´༎ຶД༎ຶ`)']
 
@@ -24,10 +25,10 @@ async def smart_dl(url, update):
                 obj.get_status(), obj.get_eta(human=True), obj.get_progress_bar())
             
             await update.message.edit(stats)
-            asyncio.sleep(3)
+        except FloodWait:
+            asyncio.sleep(5)
         except:
             await update.message.edit(choice(glitch))
-            asyncio.sleep(4)
 
     if obj.isSuccessful():
         filename = obj.get_dest().split('/')[-1]

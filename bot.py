@@ -5,18 +5,12 @@ from creds import Creds
 from miscellaneous.locks import locks_fn
 
 from yt_dl.yt_main import youtube
-from miscellaneous.buttons import button
+from miscellaneous.buttons import button_yt
 from miscellaneous.executor import executor
 from miscellaneous.miscellaneous import train, start, status, m_info
-
+from download.download import download_in_cmg
 from gdrive.tg_doc import dl_doc
 from gdrive.auth import auth, revoke, token
-
-
-
-mkup = [[pyrogram.types.InlineKeyboardButton(text=' Upload to telegram ', callback_data=b'telegram')],
-            [pyrogram.types.InlineKeyboardButton(text=' Generate link ', callback_data=b'gdrive')]]
-rply_mkup = pyrogram.types.InlineKeyboardMarkup(mkup)
 
 
 app = Client(
@@ -61,10 +55,15 @@ app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.regex(y
 app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.command(['yt'])))
 
 #Thw button handler
-app.add_handler(pyrogram.handlers.CallbackQueryHandler(button))
+app.add_handler(pyrogram.handlers.CallbackQueryHandler(button_yt))
+
+#The download handler
+dl_regex = r"\bhttp[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\.(?!com)[a-z0-9]{3,4}\b"
+app.add_handler(pyrogram.handlers.MessageHandler(download_in_cmg,filters=filters.command(['upload'])))
 
 #The hmm|mm handler
 app.add_handler(pyrogram.handlers.MessageHandler(train,filters=filters.regex(r'\b[Hh]m+\b') | filters.regex(r'\b[Mm]{2,}\b')))
+
 
 
 app.run()  # Automatically start() and idle()

@@ -4,7 +4,7 @@ import asyncio
 locks = {
         'youtube' : True,
         'document' : True,
-        'upload' : False,
+        'upload' : True,
         'revoke' : False,
         'auth' : True,
         'token' : True,

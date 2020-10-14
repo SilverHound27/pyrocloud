@@ -5,7 +5,7 @@ import os
 import shutil
 import time
 from datetime import datetime
-from upload import upload_to_tg
+from upload_helper.upload import upload_to_tg
 
 DOWNLOAD_LOCATION = os.getcwd()
 AUTH_CHANNEL = str(-1001162695537)

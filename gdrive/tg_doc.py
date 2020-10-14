@@ -1,7 +1,7 @@
 import time
 import os
 from progress import progress_for_pyrogram
-from upload import server_upload
+from upload_helper.upload import server_upload
 from miscellaneous.locks import locks
 
 async def dl_doc(client, message):

@@ -25,8 +25,9 @@ async def smart_dl(url, update):
                 obj.get_status(), obj.get_eta(human=True), obj.get_progress_bar())
             
             await update.message.edit(stats)
-        except FloodWait:
-            asyncio.sleep(5)
+            await asyncio.sleep(3)
+        except FloodWait as s:
+            await asyncio.sleep(s.x)
         except:
             await update.message.edit(choice(glitch))
 

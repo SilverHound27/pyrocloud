@@ -33,16 +33,15 @@ async def server_upload(filename: str, update, context, parent_folder: str = Non
 
     ID = update.chat.id
     ID = str(ID)
-    gauth.LoadCredentialsFile(
-        path.join(path.dirname(path.abspath(__file__)), ID))
+    gauth.LoadCredentialsFile(os.path.abspath(ID))
+        #path.join(path.dirname(path.abspath(__file__)), ID))
 
     if gauth.credentials is None:
         print("not Auth Users")
     elif gauth.access_token_expired:
         # Refresh them if expired
         gauth.Refresh()
-        gauth.SaveCredentialsFile(
-            path.join(path.dirname(path.abspath(__file__)), ID))
+        gauth.LoadCredentialsFile(os.path.abspath(ID))
     else:
         # Initialize the saved creds
         gauth.Authorize()

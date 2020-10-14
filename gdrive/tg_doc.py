@@ -27,5 +27,5 @@ async def dl_doc(client, message):
         await a.edit('<code>{}</code> \n\t\t <a href ="{}">--DOWNLOAD--</a> \t\t\t\t#uploads'.format(file_name, dl_url))
         print('Final message: Upload success')
     if os.path.isfile(file_name):
-        os.remove(file_name, file_name)
+        os.remove(file_name)
         print('file removed')

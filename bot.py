@@ -7,7 +7,7 @@ from miscellaneous.locks import locks_fn
 from yt_dl.yt_main import youtube
 from miscellaneous.buttons import button_yt
 from miscellaneous.executor import executor
-from miscellaneous.miscellaneous import train, start, status, m_info
+from miscellaneous.miscellaneous import train, start, status, m_info, help_fn
 from download.download import download_in_cmg
 from gdrive.tg_doc import dl_doc
 from gdrive.auth import auth, revoke, token
@@ -46,6 +46,9 @@ app.add_handler(pyrogram.handlers.MessageHandler(executor,filters=filters.comman
 #The message info handler --> .thread
 app.add_handler(pyrogram.handlers.MessageHandler(m_info,filters=filters.command(['info'])))
 
+#The help handler
+app.add_handler(pyrogram.handlers.MessageHandler(help_fn,filters=filters.command(['help'])))
+
 # The tg doc handler
 app.add_handler(pyrogram.handlers.MessageHandler(dl_doc,filters=filters.document))
 
@@ -57,7 +60,7 @@ app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.command
 #Thw button handler
 app.add_handler(pyrogram.handlers.CallbackQueryHandler(button_yt))
 
-#The download handler
+#The download handler(upload to tg)
 dl_regex = r"\bhttp[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\.(?!com)[a-z0-9]{3,4}\b"
 app.add_handler(pyrogram.handlers.MessageHandler(download_in_cmg,filters=filters.command(['upload'])))
 

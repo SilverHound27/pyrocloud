@@ -18,3 +18,12 @@ async def m_info(client, message):
     await message.delete()
     await asyncio.sleep(60)
     await a.delete()
+
+async def help_fn(client, message):
+    help_str = '''Youtube: Send me a youtube link or reply '/yt' to a youtube link\n
+                  Upload: reply /upload to a link\n
+                  Get download links: Send me a link'''
+    a = await message.reply_text(help_str)
+    await asyncio.sleep(60)
+    await message.delete()
+    await a.delete()

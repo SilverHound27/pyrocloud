@@ -20,13 +20,12 @@ async def dl_doc(client, message):
     
     await a.edit(text = 'Trying to upload file: \n\t{}'.format(file_name))
     
-    print('Going into the upload function')
     dl_url = await server_upload(file_name, message, client, 'HERMES_UPLOAD')
     if not dl_url:
-        await a.edit("Uploading failed")
+        await a.edit("Uploading failed", file_name)
     else:
         await a.edit('<code>{}</code> \n\t\t <a href ="{}">--DOWNLOAD--</a> \t\t\t\t#uploads'.format(file_name, dl_url))
         print('Final message: Upload success')
     if os.path.isfile(file_name):
-        os.remove(file_name)
+        os.remove(file_name, file_name)
         print('file removed')

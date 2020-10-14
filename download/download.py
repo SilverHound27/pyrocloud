@@ -1,6 +1,6 @@
 from miscellaneous.locks import locks
 from download.download_fn import smart_dl,wget_dl
-from upload_helper.upload import upload_to_tg
+from upload_helper.upload import upload_to_tg, upload_single_file
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 import re
 url_ext_ed = ""
@@ -37,15 +37,15 @@ async def download_fn(bot, update):
         await update.message.delete()
         await update.message.reply_to_message.delete()
         return
+    
     elif upload_type == 'gdrive':
         await update.message.edit("aa ayacha link thanne eduthu angu upayogicha mathi\n #coming_soon")
+    
     elif upload_type == 'telegram':
         snd_msg = await update.message.edit("Processing "+ url_ext_ed)
-        print("ID",update.from_user.id)
         dest_folder = await smart_dl(url_ext_ed, update)
         if dest_folder:
             user_id = update.from_user.id
-        #
             final_response = await upload_to_tg(
                 update.message,
                 dest_folder,

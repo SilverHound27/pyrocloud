@@ -18,7 +18,7 @@ async def executor(client, message):
     stdout, stderr = await process.communicate()
     e_response = stderr.decode().strip()
     t_response = stdout.decode().strip()
-    print(t_response)
+    
     error_reply = '<bold>Errors found:</bold> \n <code>{}</code> \n'.format(e_response)
     response_reply = "<bold>Response found:</bold> \n <code>{}</code>".format(t_response)
     

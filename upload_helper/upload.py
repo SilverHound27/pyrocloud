@@ -108,6 +108,7 @@ async def upload_to_tg(
 ):
     if not locks['upload']:
         return
+
     base_file_name = os.path.basename(local_file_name)
     caption_str = ""
     caption_str += "<code>"
@@ -181,6 +182,7 @@ async def upload_to_tg(
 
 async def upload_single_file(message, local_file_name, caption_str, from_user, edit_media):
     print('file uploahing rn:', local_file_name)
+    
     await asyncio.sleep(EDIT_SLEEP_TIME_OUT)
     sent_message = None
     start_time = time.time()
@@ -266,7 +268,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     thumb=thumb,
                     supports_streaming=True,
                     disable_notification=True,
-                    reply_to_message_id=message.reply_to_message.message_id,
+                    #reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",
@@ -321,7 +323,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                     title=title,
                     thumb=thumb,
                     disable_notification=True,
-                    reply_to_message_id=message.reply_to_message.message_id,
+                    #reply_to_message_id=message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         "trying to upload",
@@ -331,6 +333,7 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                 )
             if thumb is not None:
                 os.remove(thumb)
+        
         else:
             thumb_image_path = None
             if os.path.isfile(thumbnail_location):
@@ -373,10 +376,19 @@ async def upload_single_file(message, local_file_name, caption_str, from_user, e
                 )
             if thumb is not None:
                 os.remove(thumb)
+
+        #####POTENTIAL bug
+        try:
+            await message.delete()
+            #await message.reply_to_message.delete()
+        except:
+            pass
+
     except Exception as e:
         await message_for_progress_display.edit_text("**FAILED**\n" + str(e))
     else:
         if message.message_id != message_for_progress_display.message_id:
             await message_for_progress_display.delete()
     os.remove(local_file_name)
+    print('done')
     return sent_message

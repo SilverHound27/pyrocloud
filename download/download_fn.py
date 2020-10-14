@@ -4,14 +4,16 @@ from urllib.parse import unquote
 import time
 from pySmartDL import SmartDL
 from random import choice
+import asyncio
 
 glitch = ['( ͡° ͜ʖ ͡°)', '¯\_(ツ)_/¯', '̿̿ ̿̿ ̿̿ ̿\̿\'\̵͇̿̿\з= ( ▀ ͜͞ʖ▀) =ε/̵͇̿̿/’̿’̿ ̿ ̿̿ ̿̿ ̿̿', '¯\_(ツ)_/¯','ʕ•ᴥ•ʔ', '(ง ͠° ͟ل͜ ͡°)ง', '(;´༎ຶД༎ຶ`)']
 
 
 async def smart_dl(url, update):
-    
+
     temp_name = unquote(url).split("/")[-1]
-    dest = os.path.join(os.getcwd(), str(update.from_user.id))
+    dest = os.path.join(os.getcwd(), str(update.from_user.id), temp_name)
+
     obj = SmartDL(url, dest, progress_bar= False)
     obj.start(blocking = False)
 
@@ -22,10 +24,10 @@ async def smart_dl(url, update):
                 obj.get_status(), obj.get_eta(human=True), obj.get_progress_bar())
             
             await update.message.edit(stats)
-            time.sleep(3)
+            asyncio.sleep(3)
         except:
             await update.message.edit(choice(glitch))
-            time.sleep(4)
+            asyncio.sleep(4)
 
     if obj.isSuccessful():
         filename = obj.get_dest().split('/')[-1]
@@ -34,13 +36,12 @@ async def smart_dl(url, update):
         filename = False
         download_time = "NA"
         dest = False
-    return dest 
+    return dest
+
 
 def wget_dl(url):
         try:
             print("Downloading Started")
-            # i was facing some problem in filename That's Why i did this ,
-            #  i will fix it later :(
 
             filename = unquote(url.split('/')[-1])
             output = subprocess.check_output("wget '--output-document' '{}' '{}' ".format(filename , url), stderr=subprocess.STDOUT, shell=True)

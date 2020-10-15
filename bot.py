@@ -18,6 +18,7 @@ app = Client(
         bot_token=Creds.TG_TOKEN,
         api_id=Creds.APP_ID,
         api_hash=Creds.API_HASH,
+        workers=343
     )
 
 #@app.on_message(filters.command(["qw"]))

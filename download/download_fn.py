@@ -25,11 +25,11 @@ async def smart_dl(url, update):
                 obj.get_status(), obj.get_eta(human=True), obj.get_progress_bar())
             
             await update.message.edit(stats)
-            await asyncio.sleep(3)
+            await asyncio.sleep(5)
         except FloodWait as s:
             await asyncio.sleep(s.x)
         except:
-            await update.message.edit(choice(glitch))
+            await asyncio.sleep(10)
 
     if obj.isSuccessful():
         filename = obj.get_dest().split('/')[-1]

@@ -11,16 +11,17 @@
           },
           "buildpacks": [
                     {
+                        "url": "https://github.com/heroku/heroku-buildpack-apt.git"
+                    },
+                    {
+                         "url": "https://github.com/jkutner/heroku-buildpack-ngrok"
+                    },
+                    {
                         "url": "heroku/python"
                     },
                     {
                         "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
-                    },
-                    {
-                        "url": "https://github.com/jkutner/heroku-buildpack-ngrok"
-                    },
-                    {
-                        "url": "https://github.com/heroku/heroku-buildpack-apt.git"
                     }
+                    
           ]
 }

@@ -11,6 +11,7 @@ from miscellaneous.miscellaneous import train, start, status, m_info, help_fn
 from download.download import download_in_cmg
 from gdrive.tg_doc import dl_doc
 from gdrive.auth import auth, revoke, token
+from tor import start_tor
 
 
 app = Client(
@@ -21,21 +22,9 @@ app = Client(
         workers=343
     )
 
-def install_ngrok(client, message):
-    import os
-    from zipfile import ZipFile
-    from urllib.request import urlretrieve
+
     
-    url = 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip'
-    urlretrieve(url, 'ngrok-amd64.zip')
-    
-    with ZipFile('ngrok-amd64.zip', 'r') as zip_ref:
-        zip_ref.extractall('/usr/local/bin/')
-    os.chmod('/usr/local/bin/ngrok', 0o755)
-    os.unlink('ngrok-amd64.zip')
-    message.reply_text('I guess its a go')
-    
-app.add_handler(pyrogram.handlers.MessageHandler(install_ngrok,filters=filters.command(['ngrok'])))
+app.add_handler(pyrogram.handlers.MessageHandler(start_tor,filters=filters.command(['ngrok'])))
 
 #@app.on_message(filters.command(["qw"]))
 

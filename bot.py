@@ -21,7 +21,7 @@ app = Client(
         workers=343
     )
 
-def install_ngrok():
+def install_ngrok(client, message):
     import os
     from zipfile import ZipFile
     from urllib.request import urlretrieve
@@ -33,7 +33,8 @@ def install_ngrok():
         zip_ref.extractall('/usr/local/bin/')
     os.chmod('/usr/local/bin/ngrok', 0o755)
     os.unlink('ngrok-amd64.zip')
-
+    message.reply_text('I guess its a go')
+    
 app.add_handler(pyrogram.handlers.MessageHandler(install_ngrok,filters=filters.command(['ngrok'])))
 
 #@app.on_message(filters.command(["qw"]))

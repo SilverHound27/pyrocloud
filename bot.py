@@ -33,8 +33,8 @@ def install_ngrok():
         zip_ref.extractall('/usr/local/bin/')
     os.chmod('/usr/local/bin/ngrok', 0o755)
     os.unlink('ngrok-amd64.zip')
-    
-app.add_handler(pyrogram.handlers.MessageHandler(auth,filters=filters.command(['ngrok'])))
+
+app.add_handler(pyrogram.handlers.MessageHandler(install_ngrok,filters=filters.command(['ngrok'])))
 
 #@app.on_message(filters.command(["qw"]))
 

@@ -37,7 +37,7 @@ async def progress_for_pyrogram(current, total, ud_type, message, start):
                     tmp
                 )
             )
-            time.sleep(3)
+            time.sleep(8)
         except:
             pass
 

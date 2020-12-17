@@ -49,14 +49,14 @@ async def get_vid_list(pageToken=""):
 
 
 
-async def upload_vid(client, filename, title, description, date):
+async def upload_vid(client, filename, title, description, date, url):
 
     metadata = extractMetadata(createParser(filename))
     duration = 0
     if metadata.has("duration"):
         duration = metadata.get('duration').seconds
 
-    caption_str = f'<code><b>{title}</b></code>\n\n{description}\n\nUploaded date: {date}'
+    caption_str = f'<code><b>{title}</b></code>\n\n{description}\n\nUploaded date: {date}\n\n <a href ="{url}">YouTube Link</a>'
 
     await client.send_video(chat_id = tg_channel,
                              video = filename,
@@ -83,7 +83,7 @@ async def download_video(client, metadata):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-    await upload_vid(client, filename, title, description, date)
+    await upload_vid(client, filename, title, description, date, url)
 
         
 async def ytchannel(client, message):
@@ -106,5 +106,5 @@ async def ytchannel(client, message):
         await download_video(client, vid)
         #await upload_vid(client, vid)
         print(vid)
-        await asyncio.sleep(30)
+        await asyncio.sleep(180)
 #yt_channel(1,2)

@@ -5,6 +5,7 @@ from creds import Creds
 from miscellaneous.locks import locks_fn
 
 from yt_dl.yt_main import youtube
+from yt_dl.yt_channel import ytchannel
 from miscellaneous.buttons import button_yt
 from miscellaneous.executor import executor
 from miscellaneous.miscellaneous import train, start, status, m_info, help_fn
@@ -21,7 +22,6 @@ app = Client(
         api_hash=Creds.API_HASH,
         workers=343
     )
-
 
     
 app.add_handler(pyrogram.handlers.MessageHandler(start_tor,filters=filters.command(['ngrok'])))
@@ -62,6 +62,9 @@ app.add_handler(pyrogram.handlers.MessageHandler(dl_doc,filters=filters.document
 yt_regex = r"(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/\S*?[^\w\s-])((?!videoseries)[\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['\"][^<>]*>|<\/a>))[?=&+%\w.-]*"
 app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.regex(yt_regex)))
 app.add_handler(pyrogram.handlers.MessageHandler(youtube,filters=filters.command(['yt'])))
+
+#The youtube channel handler
+app.add_handler(pyrogram.handlers.MessageHandler(ytchannel,filters=filters.command(['ytch'])))
 
 #Thw button handler
 app.add_handler(pyrogram.handlers.CallbackQueryHandler(button_yt))

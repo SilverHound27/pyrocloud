@@ -14,8 +14,6 @@ import os
 url = 'https://www.googleapis.com/youtube/v3/search?pageToken={}&key={}&channelId={}&part=snippet,id&order=date&maxResults=200'
 key = 'AIzaSyBK3nG2HG-RxvY7Hl9zexYB2yXVPLvEqok'
 
-yt_channel = ''
-tg_channel = ""
 vid_data = []
 
 
@@ -36,20 +34,20 @@ async def parse_data(data):
             continue
 
 
-async def get_vid_list(pageToken=""):
+async def get_vid_list(yt_channel, pageToken=""):
     data = get(url.format(pageToken, key, yt_channel))
     data = data.json()
     await parse_data(data)
     #no_iterations = ceil(data['pageInfo']['totalResults']/50)
     pageToken = data.get('nextPageToken', False)
     if pageToken:
-        await get_vid_list(pageToken)
+        await get_vid_list(yt_channel, pageToken)
 
 
 
 
 
-async def upload_vid(client, filename, title, description, date, url):
+async def upload_vid(client, filename, title, description, date, url, tg_channel):
 
     metadata = extractMetadata(createParser(filename))
     duration = 0
@@ -71,7 +69,7 @@ async def upload_vid(client, filename, title, description, date, url):
     os.remove(filename)
     os.remove('thumbnail.jpg')
 
-async def download_video(client, metadata):
+async def download_video(client, metadata, tg_channel):
     """accepts a list; downloads best quality available"""
     url,title,thumbnail_url,date,description = metadata
     filename = title+'.mp4'
@@ -83,14 +81,13 @@ async def download_video(client, metadata):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-    await upload_vid(client, filename, title, description, date, url)
+    await upload_vid(client, filename, title, description, date, url, tg_channel)
 
         
 async def ytchannel(client, message):
     '''input = command ytchannel password'''
     print(str(hash(str(datetime.datetime.now(datetime.timezone.utc))[:16]))[-5:])
 
-    global tg_channel, yt_channel
     tg_channel = message.chat.id
     yt_channel = message.text.split()[-1]
     #yt_channel = "UCkitABalXafr-NqceQdDXtg"
@@ -101,10 +98,11 @@ async def ytchannel(client, message):
 
 
  
-    await get_vid_list()
-    for vid in vid_data:
-        await download_video(client, vid)
-        #await upload_vid(client, vid)
+    await get_vid_list(yt_channel, "")
+    if len(vid_data) == 0:
+        await message.reply_text('**No videos detected** \n\n Make sure you\'ve passed in a valid channel or the channel has some content in it.')
+    for vid in vid_data[::-1]:
+        await download_video(client, vid, tg_channel)
         print(vid)
-        await asyncio.sleep(180)
+        await asyncio.sleep(60)
 #yt_channel(1,2)

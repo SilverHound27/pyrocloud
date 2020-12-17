@@ -103,7 +103,8 @@ async def ytchannel(client, message):
  
     await get_vid_list()
     for vid in vid_data:
-        #download_video(vid)
+        await download_video(client, vid)
         #await upload_vid(client, vid)
         print(vid)
+        await asyncio.sleep(30)
 #yt_channel(1,2)

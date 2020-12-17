@@ -58,7 +58,7 @@ async def upload_vid(client, filename, title, description, date):
 
     caption_str = f'<code><b>{title}</b></code>\n\n{description}\n\nUploaded date: {date}'
 
-    await client.send_video(chat_id=tg_channel,
+    await client.send_video(chat_id = tg_channel,
                              video = filename,
                              caption = caption_str,
                              parse_mode = 'html',
@@ -71,7 +71,7 @@ async def upload_vid(client, filename, title, description, date):
     os.remove(filename)
     os.remove('thumbnail.jpg')
 
-def download_video(client, metadata):
+async def download_video(client, metadata):
     """accepts a list; downloads best quality available"""
     url,title,thumbnail_url,date,description = metadata
     filename = title+'.mp4'
@@ -83,7 +83,7 @@ def download_video(client, metadata):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-    upload_vid(client, filename, title, description, date)
+    await upload_vid(client, filename, title, description, date)
 
         
 async def ytchannel(client, message):

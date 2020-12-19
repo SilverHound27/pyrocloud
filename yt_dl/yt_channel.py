@@ -102,7 +102,10 @@ async def ytchannel(client, message):
     if len(vid_data) == 0:
         await message.reply_text('**No videos detected** \n\n Make sure you\'ve passed in a valid channel or the channel has some content in it.')
     for vid in vid_data[::-1]:
-        await download_video(client, vid, tg_channel)
-        print(vid)
-        await asyncio.sleep(60)
+        try:
+            await download_video(client, vid, tg_channel)
+            print(vid)
+            await asyncio.sleep(60)
+        except:
+            client.send_message(chat_id=tg_channel, text = "\n\n".join(vid))
 #yt_channel(1,2)

@@ -1,7 +1,7 @@
 import os
 class Creds():
     
-    TG_TOKEN = "1157928826:AAEC_vfwIvmLxPjfr6WAwu3eOahVNIlIjb8"
+    TG_TOKEN = "1125886135:AAHJr2rP6rWL96SVgZkwnML-uzF96giXfiU"
 
     TEAMDRIVE_FOLDER_ID = "17wQMosfFyaZ6KkWdAnIqm_NwCqvxzARY"
 
